@@ -21,7 +21,6 @@
             min-height: 100vh;
         }
 
-        /* Loading splash shown before React mounts */
         #splash {
             position: fixed;
             inset: 0;
@@ -68,12 +67,10 @@
             }
         }
 
-        /* Root app container */
         #root {
             min-height: 100vh;
         }
 
-        /* Error overlay if something crashes */
         #error-overlay {
             display: none;
             position: fixed;
@@ -116,67 +113,59 @@
 
 <body>
 
-    <!-- Loading splash -->
     <div id="splash">
         <div class="spinner"></div>
         <div id="splash-title">Reacture</div>
         <div id="splash-sub">Loading your portfolio...</div>
     </div>
 
-    <!-- Error overlay -->
     <div id="error-overlay">
         <div id="error-title">⚠️ Runtime Error</div>
         <pre id="error-message"></pre>
     </div>
 
-    <!-- React root -->
     <div id="root"></div>
 
-    <!-- React 18 + Babel standalone (no build step needed) -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- ═══════════════════════════════════════════════════════
-       USER CODE — injected by Flutter during GitHub deploy.
-       The placeholders below are replaced by _buildIndexHtml()
-       in home_view.dart before pushing to GitHub.
-       ═══════════════════════════════════════════════════════ -->
+    <!--
+    USER CODE — injected by Flutter during GitHub deploy.
+    // No App.jsx found  → replaced with the contents of App.jsx
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />); → replaced with the contents of main.jsx (import line stripped)
+  -->
     <script type="text/babel">
         // ── App.jsx ──────────────────────────────────────────────────
         { { APP_CODE } }
 
-        // ── main.jsx (inlined) ───────────────────────────────────────
+        // ── main.jsx (inlined, import already stripped) ──────────────
         { { MAIN_CODE } }
     </script>
 
-    <!-- Hide splash once React has mounted -->
     <script>
         (function () {
-            // Give Babel + React time to compile and render
             function hideSplash() {
-                const root = document.getElementById('root');
-                const splash = document.getElementById('splash');
+                var root = document.getElementById('root');
+                var splash = document.getElementById('splash');
                 if (root && root.children.length > 0) {
                     splash.classList.add('hidden');
-                    setTimeout(() => splash.remove(), 500);
+                    setTimeout(function () { if (splash.parentNode) splash.parentNode.removeChild(splash); }, 500);
                 } else {
                     setTimeout(hideSplash, 100);
                 }
             }
 
-            // Global error handler — shows the error overlay instead of a blank page
             window.addEventListener('error', function (event) {
                 document.getElementById('splash').classList.add('hidden');
-                const overlay = document.getElementById('error-overlay');
+                var overlay = document.getElementById('error-overlay');
                 overlay.classList.add('visible');
                 document.getElementById('error-message').textContent =
                     (event.error && event.error.message) || String(event.message || event);
             });
 
-            window.addEventListener('load', function () {
-                setTimeout(hideSplash, 300);
-            });
+            window.addEventListener('load', function () { setTimeout(hideSplash, 300); });
         })();
     </script>
 
