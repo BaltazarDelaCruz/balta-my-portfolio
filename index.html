@@ -138,10 +138,11 @@ root.render(<App />); → replaced with the contents of main.jsx (import line st
   -->
     <script type="text/babel">
         // ── App.jsx ──────────────────────────────────────────────────
-        { { APP_CODE } }
+        // No App.jsx found
 
         // ── main.jsx (inlined, import already stripped) ──────────────
-        { { MAIN_CODE } }
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
     </script>
 
     <script>
